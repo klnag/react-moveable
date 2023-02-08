@@ -21,12 +21,62 @@ const Badge = makeScenaFunctionComponent("Badge", function Badge(props: ScenaPro
     </p>;
 });
 
-class App extends React.Component {
-    public editor = React.createRef<Editor>();
-    public render() {
-        return <div className="app">
+const App = () => {
+    const editor = React.createRef<Editor>();
+            React.useEffect(()=> 
+            {
+                (window as any).a = editor.current!;
+                editor.current!.appendJSXs([
+                    {
+                        jsx: <div className="moveable" contentEditable="true" suppressContentEditableWarning={true}>Scena &amp; Moveable</div>,
+                        name: "(Logo)",
+                        frame: {
+                            position: "absolute",
+                            left: "50%",
+                            top: "30%",
+                            width: "250px",
+                            height: "200px",
+                            "font-size": "40px",
+                            "transform": "translate(-125px, -100px)",
+                            display: "flex",
+                            "justify-content": "center",
+                            "flex-direction": "column",
+                            "text-align": "center",
+                            "font-weight": 100,
+                        },
+                    },
+                    {
+                        jsx: <Badge />,
+                        name: "(Badges)",
+                        frame: {
+                            position: "absolute",
+                            left: "0%",
+                            top: "50%",
+                            width: "400px",
+                            "text-align": "center",
+                        },
+                    },
+                    {
+                        jsx: <div className="moveable" contentEditable="true" suppressContentEditableWarning={true}>Moveable is Draggable! Resizable! Scalable! Rotatable! Warpable! Pinchable</div>,
+                        name: "(Description)",
+                        frame: {
+                            position: "absolute",
+                            left: "0%",
+                            top: "65%",
+                            width: "400px",
+                            "font-size": "14px",
+                            "text-align": "center",
+                            "font-weight": "normal",
+                        },
+                    },
+                ], true).then(targets => {
+                    editor.current!.setSelectedTargets([targets[0]], true);
+                });
+            }
+            ) 
+        return (<div className="app">
             <Editor
-                ref={this.editor}
+                ref={editor}
                 debug={true}
             />
             <div className="bottom">
@@ -34,57 +84,7 @@ class App extends React.Component {
                 <a href="https://github.com/daybrush/scenejs" target="_blank">Scene.js</a>
                 <a href="https://github.com/daybrush/moveable" target="_blank">Moveable</a>
             </div>
-        </div>;
-    }
-    public componentDidMount() {
-        (window as any).a = this.editor.current!;
-        this.editor.current!.appendJSXs([
-            {
-                jsx: <div className="moveable" contentEditable="true" suppressContentEditableWarning={true}>Scena &amp; Moveable</div>,
-                name: "(Logo)",
-                frame: {
-                    position: "absolute",
-                    left: "50%",
-                    top: "30%",
-                    width: "250px",
-                    height: "200px",
-                    "font-size": "40px",
-                    "transform": "translate(-125px, -100px)",
-                    display: "flex",
-                    "justify-content": "center",
-                    "flex-direction": "column",
-                    "text-align": "center",
-                    "font-weight": 100,
-                },
-            },
-            {
-                jsx: <Badge />,
-                name: "(Badges)",
-                frame: {
-                    position: "absolute",
-                    left: "0%",
-                    top: "50%",
-                    width: "400px",
-                    "text-align": "center",
-                },
-            },
-            {
-                jsx: <div className="moveable" contentEditable="true" suppressContentEditableWarning={true}>Moveable is Draggable! Resizable! Scalable! Rotatable! Warpable! Pinchable</div>,
-                name: "(Description)",
-                frame: {
-                    position: "absolute",
-                    left: "0%",
-                    top: "65%",
-                    width: "400px",
-                    "font-size": "14px",
-                    "text-align": "center",
-                    "font-weight": "normal",
-                },
-            },
-        ], true).then(targets => {
-            this.editor.current!.setSelectedTargets([targets[0]], true);
-        });
-    }
+        </div>)
 }
 
 export default App;
