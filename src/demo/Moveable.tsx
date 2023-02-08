@@ -21,24 +21,12 @@ const Badge = makeScenaFunctionComponent("Badge", function Badge(props: ScenaPro
     </p>;
 });
 
-class App extends React.Component {
-    public editor = React.createRef<Editor>();
-    public render() {
-        return <div className="app">
-            <Editor
-                ref={this.editor}
-                debug={true}
-            />
-            <div className="bottom">
-                <a href="https://github.com/daybrush/moveable" target="_blank">Download</a>
-                <a href="https://daybrush.com/moveable/release/latest/doc" target="_blank">API</a>
-                <a href="https://daybrush.com/moveable/storybook" target="_blank">Storybook</a>
-            </div>
-        </div>;
-    }
-    public componentDidMount() {
-        (window as any).a = this.editor.current!;
-        this.editor.current!.appendJSXs([
+const App = () => {
+    const editor = React.createRef<Editor>();
+    React.useEffect(()=> 
+    {
+        (window as any).a = editor.current!;
+        editor.current!.appendJSXs([
             {
                 jsx: <div className="moveable" contentEditable="true" suppressContentEditableWarning={true}>Moveable</div>,
                 name: "(Logo)",
@@ -110,9 +98,23 @@ class App extends React.Component {
                 ]
             },
         ], true).then(targets => {
-            this.editor.current!.setSelectedTargets([targets[0]], true);
+            editor.current!.setSelectedTargets([targets[0]], true);
         });
     }
+    )
+        return (
+        <div className="app">
+            <Editor
+                ref={editor}
+                debug={true}
+            />
+            <div className="bottom">
+                <a href="https://github.com/daybrush/moveable" target="_blank">Download</a>
+                <a href="https://daybrush.com/moveable/release/latest/doc" target="_blank">API</a>
+                <a href="https://daybrush.com/moveable/storybook" target="_blank">Storybook</a>
+            </div>
+        </div>
+        )
 }
 
 export default App;
